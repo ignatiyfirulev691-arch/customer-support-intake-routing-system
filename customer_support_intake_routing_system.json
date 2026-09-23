@@ -1,0 +1,416 @@
+{
+  "name": "Customer Support Intake & Routing System",
+  "nodes": [
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        0,
+        0
+      ],
+      "id": "ba14e673-4c33-4796-b8cf-56bb8c855abf",
+      "name": "When clicking ‘Execute workflow’"
+    },
+    {
+      "parameters": {
+        "url": "http://127.0.0.1:5001/carrier/tracking",
+        "sendQuery": true,
+        "queryParameters": {
+          "parameters": [
+            {
+              "name": "order_id",
+              "value": "={{ $json.order_id }}"
+            },
+            {
+              "name": "customer_id",
+              "value": "={{ $json.customer_id }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.5,
+      "position": [
+        448,
+        -160
+      ],
+      "id": "618744c9-cb3a-422e-be20-fd9161290899",
+      "name": "Carrier - Get Tracking"
+    },
+    {
+      "parameters": {
+        "url": "http://127.0.0.1:5000/crm/order",
+        "sendQuery": true,
+        "queryParameters": {
+          "parameters": [
+            {
+              "name": "order_id",
+              "value": "={{ $json.order_id }}"
+            },
+            {
+              "name": "customer_id",
+              "value": "={{ $json.customer_id }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.5,
+      "position": [
+        464,
+        160
+      ],
+      "id": "ed09f4f0-e091-43af-b2fd-0f90af2b6c44",
+      "name": "CRM - Get Order"
+    },
+    {
+      "parameters": {
+        "mode": "combine",
+        "combineBy": "combineByPosition",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3.2,
+      "position": [
+        784,
+        0
+      ],
+      "id": "5ba7c438-f372-4b7d-8a1e-d97f0aa66c3b",
+      "name": "Merge"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "8cb243cf-2e78-42a6-a3f2-9b4b2232e1cf",
+              "name": "action",
+              "value": "automatic_processing",
+              "type": "string"
+            }
+          ]
+        },
+        "includeOtherFields": true,
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.5,
+      "position": [
+        1488,
+        -64
+      ],
+      "id": "8bf546e7-1bb8-4cc0-aaa2-759d708265da",
+      "name": "Automatic Processing"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "4af790f1-83ef-4a18-a1fe-c80c1ae7add0",
+              "name": "action",
+              "value": "human_handoff",
+              "type": "string"
+            }
+          ]
+        },
+        "includeOtherFields": true,
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.5,
+      "position": [
+        1488,
+        128
+      ],
+      "id": "a96154fa-f912-43bc-84aa-3a99537ba53b",
+      "name": "Human Handoff"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "55983bdb-f2ba-4bd0-91a5-5c2a17d075a4",
+              "name": "order_id",
+              "value": "84721",
+              "type": "string"
+            },
+            {
+              "id": "410d70f9-45f2-4588-a805-a5ab37f35f25",
+              "name": "customer_id",
+              "value": "551",
+              "type": "string"
+            },
+            {
+              "id": "0fb02ee4-cbe1-4050-b099-8280c7957268",
+              "name": "request_type",
+              "value": "",
+              "type": "string"
+            },
+            {
+              "id": "30c2f848-c14a-4b5c-a92b-e14f79b8edc9",
+              "name": "customer_message",
+              "value": "Тест: заказ не существует.",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.5,
+      "position": [
+        240,
+        0
+      ],
+      "id": "b66bde58-7164-4215-98a7-2b05addd52b1",
+      "name": "Test Input"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "847ed647-ab72-454e-9b68-f127cc7989cb",
+              "name": "=carrier_status",
+              "value": "={{ $json.status }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.5,
+      "position": [
+        656,
+        -160
+      ],
+      "id": "847ed647-ab72-454e-9b68-f127cc7989cb",
+      "name": "Prepare Carrier Status"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "57b6bb22-4874-4f5d-a48a-3f2a34367337",
+              "name": "=order_id",
+              "value": "={{ $json.order_id }}",
+              "type": "string"
+            },
+            {
+              "id": "cb52be30-6412-48c8-a31c-20e60156f087",
+              "name": "=customer_id",
+              "value": "={{ $json.customer_id }}",
+              "type": "string"
+            },
+            {
+              "id": "e6a8c598-2ff9-4424-8389-2ebc3fd74c13",
+              "name": "=crm_status",
+              "value": "={{ $json.status }}",
+              "type": "string"
+            },
+            {
+              "id": "e4acd89c-ae79-4f2d-8cb6-f6465560b35b",
+              "name": "request_type",
+              "value": "={{ $('Test Input').first().json.request_type }}",
+              "type": "string"
+            },
+            {
+              "id": "86b66757-06c0-4121-84ec-08cf86470370",
+              "name": "customer_message",
+              "value": "={{ $('Test Input').first().json.customer_message }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.5,
+      "position": [
+        672,
+        160
+      ],
+      "id": "95d8c3e5-f99d-432a-bdb0-d47a4af6ad76",
+      "name": "Prepare CRM Status"
+    },
+    {
+      "parameters": {
+        "jsCode": "const data = $input.first().json;\n\nconst crmStatus = String(data.crm_status ?? \"\").trim().toLowerCase();\nconst carrierStatus = String(data.carrier_status ?? \"\").trim().toLowerCase();\nconst requestType = String(data.request_type ?? \"\").trim().toLowerCase();\n\nconst isDeliveryNotReceived = requestType === \"delivery_not_received\";\n\nconst routingDecision =\n  isDeliveryNotReceived\n    ? \"human_handoff\"\n    : crmStatus === \"delivered\" && carrierStatus === \"delivered\"\n      ? \"automatic\"\n      : \"human_handoff\";\n\nreturn [\n  {\n    json: {\n      ...data,\n      routing_decision: routingDecision,\n    },\n  },\n];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        992,
+        0
+      ],
+      "id": "95ffd9c3-6a51-41c5-a475-3e22e86f362b",
+      "name": "Determine Routing Decision"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "ebdd7ae0-b620-486c-b715-9bb0b1ac1ef4",
+              "leftValue": "={{ $json.routing_decision }}",
+              "rightValue": "automatic",
+              "operator": {
+                "type": "string",
+                "operation": "equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        1264,
+        0
+      ],
+      "id": "e9c854d9-8306-49d0-b154-9dfd77d51ec8",
+      "name": "Route by Decision"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "When clicking ‘Execute workflow’": {
+      "main": [
+        [
+          {
+            "node": "Test Input",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Carrier - Get Tracking": {
+      "main": [
+        [
+          {
+            "node": "Prepare Carrier Status",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "CRM - Get Order": {
+      "main": [
+        [
+          {
+            "node": "Prepare CRM Status",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Merge": {
+      "main": [
+        [
+          {
+            "node": "Determine Routing Decision",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Test Input": {
+      "main": [
+        [
+          {
+            "node": "Carrier - Get Tracking",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "CRM - Get Order",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Prepare Carrier Status": {
+      "main": [
+        [
+          {
+            "node": "Merge",
+            "type": "main",
+            "index": 1
+          }
+        ]
+      ]
+    },
+    "Prepare CRM Status": {
+      "main": [
+        [
+          {
+            "node": "Merge",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Determine Routing Decision": {
+      "main": [
+        [
+          {
+            "node": "Route by Decision",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Route by Decision": {
+      "main": [
+        [
+          {
+            "node": "Automatic Processing",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Human Handoff",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate"
+  },
+  "versionId": "ad34f417-a354-4b42-9f37-5e57494ff827",
+  "meta": {
+    "instanceId": "fe6464c19ac12bdeb865d05c85e688c0d93c44a904feadd7ca7b1ee36301f4ae"
+  },
+  "nodeGroups": [],
+  "id": "DO3v9ABNs0HRJngJ",
+  "tags": []
+}
