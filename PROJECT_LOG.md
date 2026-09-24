@@ -107,3 +107,26 @@ The following remain intentionally open rather than invented:
 3. Assemble the employer-facing README.
 4. Keep the mock/demo nature of external integrations explicit.
 5. Avoid claiming production readiness or unsupported business impact.
+
+## W13 — 24 September 2026 — final technical validation
+
+After the W12 defense/exam and external audit, the n8n prototype was reopened for a focused regression check rather than a repeat of the full evaluation set.
+
+### Configuration validation
+
+The exported workflow was inspected directly. `Prepare CRM Status` stores fixed field names (`order_id`, `customer_id`, `crm_status`, `request_type`, `customer_message`) with expression-based values where required. `Prepare Carrier Status` stores `carrier_status` as a fixed field name with an expression-based value.
+
+### Regression checks after configuration correction
+
+- A: `delivered / delivered`, empty `request_type` → `automatic`.
+- B: `delivered / delivered`, `delivery_not_received` → `human_handoff`.
+
+Both checks passed after the configuration correction.
+
+### Production-readiness gap confirmed
+
+The HTTP Request nodes currently use `On Error → Stop Workflow`. This is retained for the MVP so the workflow does not continue with missing/failed integration data. Production behavior for `404 order_not_found`, `500`, timeout, and other integration failures still requires an explicit business/technical error-handling strategy.
+
+### Package validation
+
+The final portfolio package includes the workflow export, mock APIs, documentation, test evidence, and the four captured evidence screenshots. The mock/demo nature of the external integrations remains explicit.

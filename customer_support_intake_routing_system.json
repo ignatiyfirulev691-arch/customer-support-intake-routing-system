@@ -136,25 +136,25 @@
             {
               "id": "55983bdb-f2ba-4bd0-91a5-5c2a17d075a4",
               "name": "order_id",
-              "value": "84721",
+              "value": "84722",
               "type": "string"
             },
             {
               "id": "410d70f9-45f2-4588-a805-a5ab37f35f25",
               "name": "customer_id",
-              "value": "551",
+              "value": "552",
               "type": "string"
             },
             {
               "id": "0fb02ee4-cbe1-4050-b099-8280c7957268",
               "name": "request_type",
-              "value": "",
+              "value": "delivery_not_received",
               "type": "string"
             },
             {
               "id": "30c2f848-c14a-4b5c-a92b-e14f79b8edc9",
               "name": "customer_message",
-              "value": "Тест: заказ не существует.",
+              "value": "Тестовый запрос.",
               "type": "string"
             }
           ]
@@ -175,8 +175,8 @@
         "assignments": {
           "assignments": [
             {
-              "id": "847ed647-ab72-454e-9b68-f127cc7989cb",
-              "name": "=carrier_status",
+              "id": "ca1f44e8-0ac6-47ac-819a-0f5b9c165250",
+              "name": "carrier_status",
               "value": "={{ $json.status }}",
               "type": "string"
             }
@@ -199,19 +199,19 @@
           "assignments": [
             {
               "id": "57b6bb22-4874-4f5d-a48a-3f2a34367337",
-              "name": "=order_id",
+              "name": "order_id",
               "value": "={{ $json.order_id }}",
               "type": "string"
             },
             {
               "id": "cb52be30-6412-48c8-a31c-20e60156f087",
-              "name": "=customer_id",
+              "name": "customer_id",
               "value": "={{ $json.customer_id }}",
               "type": "string"
             },
             {
               "id": "e6a8c598-2ff9-4424-8389-2ebc3fd74c13",
-              "name": "=crm_status",
+              "name": "crm_status",
               "value": "={{ $json.status }}",
               "type": "string"
             },
@@ -406,7 +406,7 @@
     "executionOrder": "v1",
     "binaryMode": "separate"
   },
-  "versionId": "ad34f417-a354-4b42-9f37-5e57494ff827",
+  "versionId": "3abd8a22-5eff-4342-b2c6-f7ca86358a13",
   "meta": {
     "instanceId": "fe6464c19ac12bdeb865d05c85e688c0d93c44a904feadd7ca7b1ee36301f4ae"
   },
